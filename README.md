@@ -1,95 +1,76 @@
-# 🚀 Upwork Jobs - Live Dashboard
+# 🚀 Upwork Jobs Analytics - Live Dashboard
 
-Real-time analytics dashboard for Upwork job leads with automatic scoring and prioritization.
+Interactive real-time dashboard for Upwork job lead analytics with click-to-see-records functionality.
 
-## Features
+## ✨ Features
 
-- 🔴 **Live Updates**: Auto-refreshes every 30-60 seconds
-- 🐋 **Whale Detection**: Instant alerts for exceptional opportunities
-- 📊 **Interactive Charts**: Click-to-filter functionality
-- 🎯 **Lead Scoring**: Unified score combining Q, RMS, Z-Score
-- 🔍 **Advanced Filters**: Client tier, lead priority, budget range, date
+### 📊 7 Comprehensive Sections
+1. **The Big Picture** - KPIs, job type distribution
+2. **Who Are the Best Clients?** - Client tier analysis, spending patterns
+3. **Budget Deep Dive** - Fixed vs hourly, percentiles, spread analysis
+4. **Which Niches Pay Best?** - Scanner performance comparison
+5. **Lead Scoring Results** - Priority tiers, whale detection
+6. **Time Trends** - Daily volume, day of week, hourly patterns
+7. **Top Opportunities** - Highest scoring leads, score vs budget scatter
 
-## Quick Deploy to Streamlit Cloud (FREE)
+### 🖱️ Interactive Click-to-Filter
+Every chart has a selection menu that shows:
+- Detailed records table for selected segment
+- Key metrics (count, avg budget, etc.)
+- Sorted by most relevant field
 
-### Step 1: Push to GitHub
+### 💡 Text Explanations
+- Each section includes "What This Tells Us" insights
+- Formula explanations for all metrics
+- Strategy recommendations
+- Tier classification tables
 
+### 🔄 Real-Time Updates
+- Auto-refresh every 60 seconds (configurable)
+- Manual refresh button
+- Live indicator shows dashboard is active
+
+## 🚀 Quick Deploy
+
+### Option 1: Streamlit Cloud (FREE)
+
+1. **Push to GitHub:**
 ```bash
-# Create new repo on GitHub, then:
 git init
 git add .
 git commit -m "Initial commit"
-git branch -M main
 git remote add origin https://github.com/YOUR_USERNAME/upwork-dashboard.git
 git push -u origin main
 ```
 
-### Step 2: Deploy on Streamlit Cloud
+2. **Deploy:**
+- Go to [share.streamlit.io](https://share.streamlit.io)
+- Click "New app"
+- Connect your GitHub repo
+- Set main file: `app.py`
+- Deploy!
 
-1. Go to [share.streamlit.io](https://share.streamlit.io)
-2. Click "New app"
-3. Connect your GitHub account
-4. Select your repository
-5. Set main file path: `app.py`
-6. Click "Deploy"
-
-### Step 3: Add Secrets
-
-In Streamlit Cloud dashboard:
-1. Go to your app settings
-2. Click "Secrets"
-<<<<<<< HEAD
-3. Add:
-=======
-3. Add your database credentials:
+3. **Add Secrets:**
+In Streamlit Cloud settings → Secrets:
 ```toml
-DATABASE_URL = "postgresql://username:password@host:port/database"
-```
->>>>>>> 9645784 (ckpt)
-
-**Replace with your actual PostgreSQL credentials:**
-- `username`: Your database username
-- `password`: Your database password
-- `host`: Database server address
-- `port`: Database port (usually 5432)
-- `database`: Database name
-
-## Local Development
-
-### Setup
-
-1. **Clone the repository**
-```bash
-git clone <your-repo-url>
-cd upwork-dashboard
+DATABASE_URL = "postgresql://analytics_user:Rahnuma824630*@46.62.227.215:54321/postgres"
 ```
 
-2. **Install dependencies**
+### Option 2: Local Development
+
 ```bash
+# Install dependencies
 pip install -r requirements.txt
-```
 
-3. **Configure environment variables**
-```bash
-# Copy the example file
-cp .env.example .env
+# Create secrets
+mkdir -p .streamlit
+cp .streamlit/secrets.toml.example .streamlit/secrets.toml
 
-# Edit .env and add your actual PostgreSQL credentials
-# DATABASE_URL=postgresql://username:password@host:port/database
-```
-
-4. **Run the app**
-```bash
+# Run
 streamlit run app.py
 ```
 
-### Important Security Notes
-
-- Never commit the `.env` file to version control
-- The `.gitignore` file is configured to protect sensitive files
-- Use `.env.example` as a template for required environment variables
-
-## Scoring Formulas
+## 📐 Scoring Formulas
 
 ### Client Quality (Q)
 ```
@@ -113,33 +94,37 @@ Score = Q × RMS × (1 + max(0, Z))
 Normalized to 0-100 scale
 ```
 
-## Client Tiers
+## 🎨 Dashboard Structure
 
-| Tier | Percentile | Meaning |
-|------|------------|---------|
-| 💎 Platinum | Top 5% | Premium clients |
-| 🥇 Gold | Top 10% | High spenders |
-| 🥈 Silver | Top 25% | Reliable clients |
-| 🥉 Bronze | Top 50% | Average clients |
-| 📦 Standard | Bottom 50% | New/low spenders |
+```
+┌─────────────────────────────────────────────────┐
+│ 🔴 LIVE  Upwork Analytics Dashboard             │
+├─────────────────────────────────────────────────┤
+│ [KPI] [KPI] [KPI] [KPI]                         │
+├────────────────────────┬────────────────────────┤
+│                        │ 🖱️ Click to filter:   │
+│     📊 CHART           │ [Dropdown]             │
+│                        │ ┌──────────────────┐   │
+│                        │ │ Records Table    │   │
+│                        │ └──────────────────┘   │
+├────────────────────────┴────────────────────────┤
+│ 💡 What This Tells Us                           │
+│ [Insight box with explanation]                  │
+├─────────────────────────────────────────────────┤
+│ 📚 Formula Reference Card                       │
+└─────────────────────────────────────────────────┘
+```
 
-## Lead Priorities
+## 📁 File Structure
 
-| Priority | Percentile | Action |
-|----------|------------|--------|
-| 🔥 TOP 5% | Score ≥ P95 | Apply immediately |
-| ⭐ TOP 20% | Score ≥ P80 | High priority |
-| 📋 STANDARD | Below P80 | Review if fit |
-
-## Outlier Classes
-
-| Class | Z-Score | Rarity |
-|-------|---------|--------|
-| 🐋 Whale | Z ≥ 3 | Top 0.1% |
-| 🐠 Big Fish | Z ≥ 2 | Top 2% |
-| 🐟 Above Avg | Z ≥ 1 | Top 16% |
-| ➡️ Average | -1 < Z < 1 | Middle 68% |
-| 🦐 Below Avg | Z ≤ -1 | Bottom 16% |
+```
+upwork-dashboard/
+├── app.py                  # Main Streamlit app
+├── requirements.txt        # Python dependencies
+├── README.md              # This file
+└── .streamlit/
+    └── secrets.toml       # Database credentials
+```
 
 ## License
 
