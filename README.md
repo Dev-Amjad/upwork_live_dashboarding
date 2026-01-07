@@ -38,21 +38,56 @@ git push -u origin main
 In Streamlit Cloud dashboard:
 1. Go to your app settings
 2. Click "Secrets"
+<<<<<<< HEAD
 3. Add:
+=======
+3. Add your database credentials:
+```toml
+DATABASE_URL = "postgresql://username:password@host:port/database"
+```
+>>>>>>> 9645784 (ckpt)
+
+**Replace with your actual PostgreSQL credentials:**
+- `username`: Your database username
+- `password`: Your database password
+- `host`: Database server address
+- `port`: Database port (usually 5432)
+- `database`: Database name
 
 ## Local Development
 
+### Setup
+
+1. **Clone the repository**
 ```bash
-# Install dependencies
+git clone <your-repo-url>
+cd upwork-dashboard
+```
+
+2. **Install dependencies**
+```bash
 pip install -r requirements.txt
+```
 
-# Create secrets file
-mkdir -p .streamlit
-cp secrets.toml.example .streamlit/secrets.toml
+3. **Configure environment variables**
+```bash
+# Copy the example file
+cp .env.example .env
 
-# Run app
+# Edit .env and add your actual PostgreSQL credentials
+# DATABASE_URL=postgresql://username:password@host:port/database
+```
+
+4. **Run the app**
+```bash
 streamlit run app.py
 ```
+
+### Important Security Notes
+
+- Never commit the `.env` file to version control
+- The `.gitignore` file is configured to protect sensitive files
+- Use `.env.example` as a template for required environment variables
 
 ## Scoring Formulas
 

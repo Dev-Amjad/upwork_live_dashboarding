@@ -11,6 +11,11 @@ from datetime import datetime, timedelta
 import numpy as np
 import json
 import time
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # ==================== PAGE CONFIG ====================
 st.set_page_config(
@@ -94,11 +99,28 @@ LEAD_COLORS = {
 @st.cache_resource
 def get_engine():
     """Create database connection (cached)"""
-    # Use secrets in production, fallback to direct string for development
+    # Priority: 1. Streamlit secrets (cloud) 2. Environment variables (local/docker)
+    db_url = None
+
+    # Try Streamlit secrets first (for Streamlit Cloud deployment)
     try:
         db_url = st.secrets["DATABASE_URL"]
     except:
-        db_url = "postgresql://analytics_user:Rahnuma824630*@46.62.227.215:54321/postgres"
+        pass
+
+    # Fall back to environment variables
+    if not db_url:
+        db_url = os.getenv("DATABASE_URL")
+
+    # Raise error if no configuration found
+    if not db_url:
+        raise ValueError(
+            "DATABASE_URL not found! Please set it in:\n"
+            "- .env file for local development\n"
+            "- Streamlit secrets for cloud deployment\n"
+            "- Environment variables for Docker/production"
+        )
+
     return create_engine(db_url)
 
 def load_data():
