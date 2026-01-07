@@ -140,72 +140,125 @@ def apply_chart_styling(fig, height=400):
 # ADD THIS entire function
 def show_documentation_panel():
     """Show full documentation in a panel"""
+    # Read the DOCUMENTATION.md file
+    import os
+    doc_path = os.path.join(os.path.dirname(__file__), 'DOCUMENTATION.md')
+
+    try:
+        with open(doc_path, 'r', encoding='utf-8') as f:
+            doc_content = f.read()
+    except FileNotFoundError:
+        doc_content = "⚠️ DOCUMENTATION.md file not found!"
+
+    # Apply custom CSS for styling
     st.markdown("""
     <style>
-        .doc-container { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid #334155; border-radius: 16px; padding: 0; margin: 1rem 0; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
-        .doc-header-bar { background: linear-gradient(90deg, #6366f1, #8b5cf6); padding: 1rem 1.5rem; border-radius: 16px 16px 0 0; }
-        .doc-header-bar h2 { margin: 0; color: white; font-size: 1.3rem; }
-        .doc-body { padding: 1.5rem; max-height: 70vh; overflow-y: auto; color: #e2e8f0; }
-        .doc-body h3 { color: #a5b4fc; border-bottom: 2px solid #4f46e5; padding-bottom: 0.5rem; margin-top: 2rem; }
-        .doc-body h3:first-child { margin-top: 0; }
-        .doc-body h4 { color: #c4b5fd; margin-top: 1.5rem; }
-        .doc-body code { background: #0f172a; color: #22d3ee; padding: 0.2rem 0.5rem; border-radius: 4px; }
-        .doc-body pre { background: #0f172a; padding: 1rem; border-radius: 8px; border: 1px solid #334155; }
-        .doc-body pre code { padding: 0; background: none; }
-        .doc-body table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
-        .doc-body th { background: #334155; color: #a5b4fc; padding: 0.75rem; text-align: left; border: 1px solid #475569; }
-        .doc-body td { padding: 0.75rem; border: 1px solid #334155; color: #cbd5e1; }
-        .doc-body tr:nth-child(even) { background: rgba(51, 65, 85, 0.3); }
+        .doc-container {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid #334155;
+            border-radius: 16px;
+            padding: 0;
+            margin: 1rem 0;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        .doc-header-bar {
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            padding: 1rem 1.5rem;
+            border-radius: 16px 16px 0 0;
+        }
+        .doc-header-bar h2 {
+            margin: 0;
+            color: white;
+            font-size: 1.3rem;
+        }
+        .doc-body {
+            padding: 1.5rem;
+            max-height: 70vh;
+            overflow-y: auto;
+            color: #e2e8f0;
+        }
+        .doc-body h1, .doc-body h2, .doc-body h3 {
+            color: #a5b4fc;
+            border-bottom: 2px solid #4f46e5;
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+        }
+        .doc-body h1:first-child, .doc-body h2:first-child, .doc-body h3:first-child {
+            margin-top: 0;
+        }
+        .doc-body h4 {
+            color: #c4b5fd;
+            margin-top: 1.5rem;
+        }
+        .doc-body code {
+            background: #0f172a;
+            color: #22d3ee;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+        }
+        .doc-body pre {
+            background: #0f172a;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #334155;
+        }
+        .doc-body pre code {
+            padding: 0;
+            background: none;
+        }
+        .doc-body table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        .doc-body th {
+            background: #334155;
+            color: #a5b4fc;
+            padding: 0.75rem;
+            text-align: left;
+            border: 1px solid #475569;
+        }
+        .doc-body td {
+            padding: 0.75rem;
+            border: 1px solid #334155;
+            color: #cbd5e1;
+        }
+        .doc-body tr:nth-child(even) {
+            background: rgba(51, 65, 85, 0.3);
+        }
+        .doc-body ul, .doc-body ol {
+            color: #cbd5e1;
+        }
+        .doc-body li {
+            margin: 0.5rem 0;
+        }
+        .doc-body p {
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+        .doc-body blockquote {
+            border-left: 4px solid #6366f1;
+            padding-left: 1rem;
+            margin: 1rem 0;
+            color: #94a3b8;
+        }
+        .doc-body strong {
+            color: #f1f5f9;
+        }
+        .doc-body a {
+            color: #60a5fa;
+            text-decoration: none;
+        }
+        .doc-body a:hover {
+            text-decoration: underline;
+        }
     </style>
-
-    <div class="doc-container">
-        <div class="doc-header-bar"><h2>📚 Documentation & Methodology</h2></div>
-        <div class="doc-body">
-            <h3>📊 How We Calculate Scores</h3>
-            <h4>1️⃣ Client Quality Score (Q)</h4>
-            <pre><code>Q = ln((Total_Spent / (Hires + 1)) + 1)</code></pre>
-            <table><tr><th>Q Score</th><th>Client Type</th></tr>
-            <tr><td>Q &lt; 4</td><td>New/Budget</td></tr>
-            <tr><td>Q 4-6</td><td>Average</td></tr>
-            <tr><td>Q 6-7</td><td>Good</td></tr>
-            <tr><td>Q &gt; 7</td><td><strong>Premium</strong></td></tr></table>
-
-            <h4>2️⃣ Relative Market Score (RMS)</h4>
-            <pre><code>Fixed: RMS = Budget / Median
-Hourly: RMS = (Max_Rate / Median) × Spread_Bonus</code></pre>
-            <table><tr><th>RMS</th><th>Meaning</th></tr>
-            <tr><td>&lt; 1.0</td><td>Below market</td></tr>
-            <tr><td>1.0 - 2.0</td><td>Above average</td></tr>
-            <tr><td>&gt; 2.0</td><td><strong>Premium</strong></td></tr></table>
-
-            <h4>3️⃣ Z-Score (Niche Outlier)</h4>
-            <pre><code>Z = (Budget - Niche_Mean) / Niche_StdDev</code></pre>
-            <table><tr><th>Z-Score</th><th>Category</th></tr>
-            <tr><td>Z ≥ 3.0</td><td>🐋 Whale</td></tr>
-            <tr><td>Z ≥ 2.0</td><td>🐠 Big Fish</td></tr>
-            <tr><td>Z ≥ 1.0</td><td>🐟 Above Avg</td></tr>
-            <tr><td>Z ≥ -1.0</td><td>➡️ Average</td></tr>
-            <tr><td>Z &lt; -1.0</td><td>🦐 Below Avg</td></tr></table>
-
-            <h4>4️⃣ Final Score</h4>
-            <pre><code>Score = Q × RMS × (1 + max(0, Z))</code></pre>
-
-            <h3>🏆 Client Tiers</h3>
-            <table><tr><th>Tier</th><th>Percentile</th><th>Action</th></tr>
-            <tr><td>💎 Platinum</td><td>Top 5%</td><td><strong>Priority #1</strong></td></tr>
-            <tr><td>🥇 Gold</td><td>Top 10%</td><td>High priority</td></tr>
-            <tr><td>🥈 Silver</td><td>Top 25%</td><td>Good</td></tr>
-            <tr><td>🥉 Bronze</td><td>Top 50%</td><td>Consider</td></tr>
-            <tr><td>📦 Standard</td><td>Bottom 50%</td><td>Selective</td></tr></table>
-
-            <h3>🎯 Lead Priority</h3>
-            <table><tr><th>Tier</th><th>Action</th></tr>
-            <tr><td>🔥 TOP 5%</td><td><strong>APPLY NOW</strong></td></tr>
-            <tr><td>⭐ TOP 20%</td><td>Review daily</td></tr>
-            <tr><td>📋 STANDARD</td><td>If fits</td></tr></table>
-        </div>
-    </div>
     """, unsafe_allow_html=True)
+
+    # Display documentation in styled container
+    st.markdown('<div class="doc-container"><div class="doc-header-bar"><h2>📚 Complete Documentation</h2></div><div class="doc-body">', unsafe_allow_html=True)
+    st.markdown(doc_content, unsafe_allow_html=True)
+    st.markdown('</div></div>', unsafe_allow_html=True)
 
 # ==================== DATABASE ====================
 @st.cache_resource
