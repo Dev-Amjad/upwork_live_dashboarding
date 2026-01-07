@@ -39,9 +39,6 @@ In Streamlit Cloud dashboard:
 1. Go to your app settings
 2. Click "Secrets"
 3. Add:
-```toml
-DATABASE_URL = "postgresql://analytics_user:Rahnuma824630*@46.62.227.215:54321/postgres"
-```
 
 ## Local Development
 
