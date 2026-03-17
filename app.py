@@ -295,6 +295,10 @@ def process_data(jobs_df, scanners_df):
         })
     
     client_data = df.apply(extract_client, axis=1)
+    # Drop any existing columns that will be added from client_data to avoid duplicates
+    overlap = [c for c in client_data.columns if c in df.columns]
+    if overlap:
+        df = df.drop(columns=overlap)
     df = pd.concat([df, client_data], axis=1)
     
     df['budget'] = pd.to_numeric(df['budget'], errors='coerce').fillna(0)
@@ -383,6 +387,7 @@ def show_records_table(df, max_rows=15):
     
     cols_available = [c for c in cols_to_show if c in display_df.columns]
     result_df = display_df[cols_available].copy()
+    result_df = result_df.loc[:, ~result_df.columns.duplicated()]
     
     if 'title' in result_df.columns:
         result_df['title'] = result_df['title'].str[:45] + '...'
